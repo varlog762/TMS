@@ -1,8 +1,8 @@
 from wsgiref.simple_server import make_server
 
 from framework import settings
-from framework import wsgi
 from framework.consts import SERVER_RUNNING_BANNER
+from framework import wsgi
 
 
 def run():
