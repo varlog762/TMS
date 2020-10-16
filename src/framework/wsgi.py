@@ -15,8 +15,9 @@ def application(environ, start_response):
 
 def read_from_ind_html():
     path = DIR_STATIC / "index.html"
-    fp = path.open("r")
-    payload = fp.read()
-    fp.close()
+    with path.open("r") as fp:
+        payload = fp.read()
+
     payload = payload.encode()
+    # str.encode() - перекодирует строку в байтстроку
     return payload
