@@ -12,15 +12,6 @@ def application(environ, start_response):
         start_response(status, list(headers.items()))
 
         yield payload
-    elif url == "/images/favicon.ico":
-        status = "200 OK"
-        headers = {
-            "Content-type": "img/png",
-        }
-        payload = read_from_favicon()
-        start_response(status, list(headers.items()))
-
-        yield payload
 
     else:
         status = "200 OK"
@@ -53,10 +44,10 @@ def read_from_styles_css():
     return payload
 
 
-def read_from_favicon():
-    path = DIR_STATIC / "/images/favicon.ico"
+'''def read_from_favicon():
+    path = DIR_STATIC / "/images/favicon.png"
     with path.open("r") as fp:
         payload = fp.read()
 
     payload = payload.encode()
-    return payload
+    return payload'''
