@@ -2,7 +2,7 @@ from framework.consts import DIR_STATIC
 
 
 def application(environ, start_response):
-    url = environ['PATH_INFO']
+    url = environ["PATH_INFO"]
     if url == "/styles.css":
         status = "200 OK"
         headers = {
@@ -44,10 +44,10 @@ def read_from_styles_css():
     return payload
 
 
-'''def read_from_favicon():
+"""def read_from_favicon():
     path = DIR_STATIC / "/images/favicon.png"
     with path.open("r") as fp:
         payload = fp.read()
 
     payload = payload.encode()
-    return payload'''
+    return payload"""
