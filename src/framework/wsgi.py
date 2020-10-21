@@ -12,7 +12,15 @@ def application(environ, start_response):
         start_response(status, list(headers.items()))
 
         yield payload
+    elif url == "/pic.png":
+        status = "200 OK"
+        headers = {
+            "Content-type": "image/png",
+        }
+        payload = read_from_png()
+        start_response(status, list(headers.items()))
 
+        yield payload
     else:
         status = "200 OK"
         headers = {
@@ -31,7 +39,7 @@ def read_from_ind_html():
         payload = fp.read()
 
     payload = payload.encode()
-    # str.encode() - перекодирует строку в байтстроку
+    # str.encode() - рекодирует строку в байтстроку
     return payload
 
 
@@ -44,10 +52,9 @@ def read_from_styles_css():
     return payload
 
 
-"""def read_from_favicon():
-    path = DIR_STATIC / "/images/favicon.png"
-    with path.open("r") as fp:
+def read_from_png():
+    path = DIR_STATIC / "pic.png"
+    with path.open("rb") as fp:
         payload = fp.read()
 
-    payload = payload.encode()
-    return payload"""
+    return payload
