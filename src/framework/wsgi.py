@@ -39,7 +39,7 @@ def read_from_ind_html():
         payload = fp.read()
 
     payload = payload.encode()
-    # str.encode() - перекодирует строку в байтстроку
+    # str.encode() - рекодирует строку в байтстроку
     return payload
 
 
