@@ -1,4 +1,3 @@
-import mimetypes
 from framework.consts import DIR_STATIC
 
 
