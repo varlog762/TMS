@@ -58,4 +58,3 @@ def read_from_png():
         payload = fp.read()
 
     return payload
-
