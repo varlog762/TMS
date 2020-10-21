@@ -1,3 +1,4 @@
+import mimetypes
 from framework.consts import DIR_STATIC
 
 
@@ -53,7 +54,7 @@ def read_from_styles_css():
 
 
 def read_from_png():
-    path = DIR_STATIC / "/pic.png"
+    path = DIR_STATIC / "pic.png"
     with path.open("rb") as fp:
         payload = fp.read()
 
