@@ -1,59 +1,29 @@
+import mimetypes
+
 from framework.consts import DIR_STATIC
 
 
 def application(environ, start_response):
     url = environ["PATH_INFO"]
-    if url == "/styles.css":
-        status = "200 OK"
-        headers = {
-            "Content-type": "text/css",
-        }
-        payload = read_from_styles_css()
-        start_response(status, list(headers.items()))
 
-        yield payload
-    elif url == "/pic.png":
-        status = "200 OK"
-        headers = {
-            "Content-type": "image/png",
-        }
-        payload = read_from_png()
-        start_response(status, list(headers.items()))
+    file_names = {
+        "/styles.css": "styles.css",
+        "/pic.png": "pic.png",
+        "/test.pdf": "test.pdf",
+    }
 
-        yield payload
-    else:
-        status = "200 OK"
-        headers = {
-            "Content-type": "text/html",
-        }
-        payload = read_from_ind_html()
-
-        start_response(status, list(headers.items()))
-
-        yield payload
+    file_name = file_names.get(url, "index.html")
+    status = "200 OK"
+    headers = {
+        "Content-type": mimetypes.guess_type(file_name)[0],
+    }
+    payload = read_static(file_name)
+    start_response(status, list(headers.items()))
+    yield payload
 
 
-def read_from_ind_html():
-    path = DIR_STATIC / "index.html"
-    with path.open("r") as fp:
-        payload = fp.read()
-
-    payload = payload.encode()
-    # str.encode() - рекодирует строку в байтстроку
-    return payload
-
-
-def read_from_styles_css():
-    path = DIR_STATIC / "styles.css"
-    with path.open("r") as fp:
-        payload = fp.read()
-
-    payload = payload.encode()
-    return payload
-
-
-def read_from_png():
-    path = DIR_STATIC / "pic.png"
+def read_static(file_name: str) -> bytes:
+    path = DIR_STATIC / file_name
     with path.open("rb") as fp:
         payload = fp.read()
 
