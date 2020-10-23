@@ -10,6 +10,8 @@ def application(environ, start_response):
         m_type = mimetypes.guess_type(url)
     else:
         m_type = ("text/html",)
+        """Проверяем содержится ли в урле запроса точка: если да, то тип контента определяет mimetypes, 
+        если нет, значит зпрашивается / и выставляется тип 'text/html'."""
 
     if url == "/styles.css":
         status = "200 OK"
