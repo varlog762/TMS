@@ -46,3 +46,4 @@ def err_404(url: str) -> bytes:
     payload = f"Your number is: {numb}. Page {url} not found!"
 
     return payload.encode('utf-8')
+
