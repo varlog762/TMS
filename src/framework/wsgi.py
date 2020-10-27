@@ -28,7 +28,7 @@ def application(environ, start_response):
         headers = {
             "Content-type": "text/plain",
         }
-        payload = err_404(url)
+        payload = error_404(url)
         start_response(status, list(headers.items()))
         yield payload
 
@@ -41,7 +41,7 @@ def read_static(file_name: str) -> bytes:
     return payload
 
 
-def err_404(url: str) -> bytes:
+def error_404(url: str) -> bytes:
     numb = random.randint(900, 999)
     payload = f"Your number is: {numb}. Page {url} not found!"
 
