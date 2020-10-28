@@ -3,12 +3,15 @@ from handlers.handle_index import handle_index
 from handlers.handle_css import handle_css
 from handlers.handle_logo import handle_logo
 from handlers.handle_pdf import handle_pdf
+from handlers import handle_picture
+
 
 handlers = {
     "/": handle_index,
     "/pic.png": handle_logo,
     "/styles.css": handle_css,
     "/test.pdf": handle_pdf,
+    "/python.png": handle_picture,
 }
 
 
