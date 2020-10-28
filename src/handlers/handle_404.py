@@ -1,6 +1,6 @@
 import random
 
-from framework.wsgi import ResponseT
+from framework.types import ResponseT
 
 
 def handle_404(environ) -> ResponseT:

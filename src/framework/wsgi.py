@@ -1,9 +1,8 @@
-from typing import Tuple
-
-from framework.consts import DIR_STATIC
 from handlers.handle_404 import handle_404
-
-ResponseT = Tuple[str, dict, bytes]
+from handlers.handle_index import handle_index
+from handlers.handle_css import handle_css
+from handlers.handle_logo import handle_logo
+from handlers.handle_pdf import handle_pdf
 
 handlers = {
     "/": handle_index,
@@ -25,9 +24,3 @@ def application(environ, start_response):
     yield payload
 
 
-def read_static(file_name) -> bytes:
-    path = DIR_STATIC / file_name
-    with path.open("rb") as fp:
-        payload = fp.read()
-
-    return payload

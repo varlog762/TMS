@@ -1,5 +1,5 @@
-from framework.wsgi import read_static
-from framework.wsgi import ResponseT
+from framework.types import ResponseT
+from framework.utils import read_static
 
 
 def handle_index(_environ) -> ResponseT:
