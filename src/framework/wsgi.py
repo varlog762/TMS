@@ -1,10 +1,9 @@
 from handlers.handle_404 import handle_404
-from handlers.handle_index import handle_index
 from handlers.handle_css import handle_css
+from handlers.handle_index import handle_index
 from handlers.handle_logo import handle_logo
 from handlers.handle_pdf import handle_pdf
-from handlers import handle_picture
-
+from handlers.handle_picture import handle_picture
 
 handlers = {
     "/": handle_index,
@@ -25,5 +24,3 @@ def application(environ, start_response):
     start_response(status, list(headers.items()))
 
     yield payload
-
-
