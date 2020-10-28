@@ -1,4 +1,38 @@
 h1 {
-    color: red;
+    color: #ffff67;
 }
-body { background-color: azure }
+body { background-color: #008b9e }
+.btn0 {
+    display: inline-block; /* Строчно-блочный элемент */
+    background: #00495b; /* Серый цвет фона */
+    color: #ffff67; /* Белый цвет текста */
+    padding: 5px 35px; /* Поля вокруг текста */
+    text-decoration: none; /* Убираем подчёркивание */
+    border-radius: 3px; /* Скругляем уголки */
+   }
+.btn1 {
+    display: inline-block; /* Строчно-блочный элемент */
+    background: #00495b; /* Серый цвет фона */
+    color: #ffff67; /* Белый цвет текста */
+    padding: 5px 35px; /* Поля вокруг текста */
+    text-decoration: none; /* Убираем подчёркивание */
+    border-radius: 3px; /* Скругляем уголки */
+   }
+.btn2 {
+    border: 1px solid #333; /* Рамка */
+    display: inline-block;
+    padding: 5px 35px; /* Поля */
+    text-decoration: none; /* Убираем подчёркивание */
+    color: #ffff67; /* Цвет текста */
+  }
+   .btn2:hover {
+    box-shadow: 0 0 5px rgba(0,0,0,0.3); /* Тень */
+    background: linear-gradient(to bottom, #003460, #00495b); /* Градиент */
+    color: #ffff67;
+   }
+hr {
+    border: none; /* Убираем границу для браузера Firefox */
+    color: #00495b; /* Цвет линии для остальных браузеров */
+    background-color: #00495b; /* Цвет линии для браузера Firefox и Opera */
+    height: 4px; /* Толщина линии */
+   }

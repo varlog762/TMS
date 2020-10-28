@@ -1,49 +1,20 @@
-import mimetypes
-import random
+from handlers.handle_404 import handle_404
+from handlers.handle_css import handle_css
+from handlers.handle_index import handle_index
+from handlers.handle_logo import handle_logo
+from handlers.handle_pdf import handle_pdf
+from handlers.handle_picture import handle_picture
 
-from framework.consts import DIR_STATIC
+handlers = {
+    "/": handle_index,
+    "/pic.png": handle_logo,
+    "/styles.css": handle_css,
+    "/test.pdf": handle_pdf,
+    "/python.png": handle_picture,
+}
 
 
 def application(environ, start_response):
     url = environ["PATH_INFO"]
 
-    file_names = {
-        "/styles.css": "styles.css",
-        "/pic.png": "pic.png",
-        "/test.pdf": "test.pdf",
-        "/": "index.html",
-    }
-
-    file_name = file_names.get(url)
-    if file_name is not None:
-        status = "200 OK"
-        headers = {
-            "Content-type": mimetypes.guess_type(file_name)[0],
-        }
-        payload = read_static(file_name)
-        start_response(status, list(headers.items()))
-        yield payload
-    else:
-        status = "404 Not Found"
-        headers = {
-            "Content-type": "text/plain",
-        }
-        payload = error_404(url)
-        start_response(status, list(headers.items()))
-        yield payload
-
-
-def read_static(file_name: str) -> bytes:
-    path = DIR_STATIC / file_name
-    with path.open("rb") as fp:
-        payload = fp.read()
-
-    return payload
-
-
-def error_404(url: str) -> bytes:
-    numb = random.randint(900, 999)
-    payload = f"Your number is: {numb}. Page {url} not found!"
-
-    return payload.encode('utf-8')
 
