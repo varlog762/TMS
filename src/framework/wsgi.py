@@ -17,4 +17,3 @@ handlers = {
 def application(environ, start_response):
     url = environ["PATH_INFO"]
 
-
