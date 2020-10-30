@@ -1,4 +1,3 @@
-import random
 from html import escape
 
 from framework.types import ResponseT
