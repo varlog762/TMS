@@ -22,7 +22,7 @@ def handle_404(environ) -> ResponseT:
     base_html = read_static("_base.html", str)
 
     html_404 = f"""
-    <h1>OOPS!</h1>
+    <a href="/"><h1>OOPS!</h1></a>
         <hr>
         <h2>The path you've looking for does not exist on this server.</h2>
         <p class="url"><span>{url}</span></p>

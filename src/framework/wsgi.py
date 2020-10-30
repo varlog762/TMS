@@ -7,7 +7,7 @@ from handlers.handle_picture import handle_picture
 
 handlers = {
     "/": handle_index,
-    "/pic.png": handle_logo,
+    "/logo.png": handle_logo,
     "/styles.css": handle_css,
     "/test.pdf": handle_pdf,
     "/python.png": handle_picture,
