@@ -36,5 +36,5 @@ def handle_404(environ) -> ResponseT:
     payload = document.encode()
     status = "404 Not Found"
     headers = {"Content-type": "text/html"}
-
+    
     return status, headers, payload
