@@ -1,26 +1,41 @@
-from handlers.handle_404 import handle_404
-from handlers.handle_css import handle_css
-from handlers.handle_index import handle_index
-from handlers.handle_logo import handle_logo
-from handlers.handle_pdf import handle_pdf
-from handlers.handle_picture import handle_picture
-
-handlers = {
-    "/": handle_index,
-    "/logo.png": handle_logo,
-    "/styles.css": handle_css,
-    "/test.pdf": handle_pdf,
-    "/python.png": handle_picture,
-}
+from framework.errors import NotFound
+from framework.types import RequestT
+from framework.utils import build_form_data
+from framework.utils import get_request_body
+from framework.utils import get_request_headers
+from framework.utils import get_request_method
+from framework.utils import get_request_path
+from framework.utils import get_request_query
+from handlers import get_handler_and_kwargs
+from handlers import special
 
 
-def application(environ, start_response):
-    url = environ["PATH_INFO"]
+def application(environ: dict, start_response):
+    path = get_request_path(environ)
+    method = get_request_method(environ)
+    handler, kwargs = get_handler_and_kwargs(path)
+    request_headers = get_request_headers(environ)
+    query = get_request_query(environ)
+    body = get_request_body(environ)
+    form_data = build_form_data(body)
 
-    handler = handlers.get(url, handle_404)
+    request = RequestT(
+        body=body,
+        form_data=form_data,
+        headers=request_headers,
+        kwargs=kwargs,
+        method=method,
+        path=path,
+        query=query,
+    )
 
-    status, headers, payload = handler(environ)
+    try:
+        response = handler(request)
+    except NotFound:
+        response = special.handle_404(request)
+    except Exception:
+        response = special.handle_500(request)
 
-    start_response(status, list(headers.items()))
+    start_response(response.status, list(response.headers.items()))
 
-    yield payload
+    yield response.payload or b""

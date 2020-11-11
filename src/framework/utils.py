@@ -1,11 +1,22 @@
+import dataclasses
+import http
+import json
+import mimetypes
 import re
 from html import escape
+from pathlib import Path
 from typing import Any
 from typing import Callable
 from typing import Dict
 from typing import Tuple
+from urllib.parse import parse_qs
 
 from framework.consts import DIR_STATIC
+from framework.consts import METHODS_WITH_REQUEST_BODY
+from framework.consts import USER_DATA_FILE
+from framework.errors import NotFound
+from framework.types import StaticT
+from framework.types import UserDataT
 
 
 def http_first(value: Tuple[str, Any]) -> tuple:
@@ -32,16 +43,96 @@ def get_formatter(env_var_name: str) -> Callable[[str], str]:
     return lambda _v: _v
 
 
-def read_static(file_name: str, converter: Callable = bytes) -> Any:
-    path = DIR_STATIC / file_name
+def read_static(file_name: str) -> StaticT:
+    if file_name.startswith("/"):
+        file_obj = Path(file_name).resolve()
+    else:
+        file_obj = (DIR_STATIC / file_name).resolve()
 
-    modes: Dict[Any, str] = {
-        str: "r",
-    }
+    if not file_obj.exists():
+        raise NotFound
 
-    mode = modes.get(converter, "rb")
+    with file_obj.open("rb") as fp:
+        content = fp.read()
 
-    with path.open(mode) as fp:
-        payload = fp.read()
+    content_type = mimetypes.guess_type(file_name)[0]
 
-    return converter(payload)
+    return StaticT(content=content, content_type=content_type)
+
+
+def get_request_headers(environ: dict) -> dict:
+    environ_headers = filter(lambda _kv: _kv[0].startswith("HTTP_"), environ.items())
+    request_headers = {key[5:]: value for key, value in environ_headers}
+    return request_headers
+
+
+def get_request_query(environ: dict) -> dict:
+    qs = environ.get("QUERY_STRING")
+    query = parse_qs(qs or "")
+    return query
+
+
+def build_status(code: int) -> str:
+    status = http.HTTPStatus(code)
+
+    def _process_word(_word: str) -> str:
+        if _word == "OK":
+            return _word
+        return _word.capitalize()
+
+    reason = " ".join(_process_word(word) for word in status.name.split("_"))
+
+    text = f"{code} {reason}"
+    return text
+
+
+def build_form_data(body: bytes) -> Dict[str, Any]:
+    qs = body.decode()
+    form_data = parse_qs(qs or "")
+    return form_data
+
+
+def get_request_body(environ: dict) -> bytes:
+    method = get_request_method(environ)
+    if method not in METHODS_WITH_REQUEST_BODY:
+        return b""
+
+    fp = environ.get("wsgi.input")
+    if not fp:
+        return b""
+
+    cl = int(environ.get("CONTENT_LENGTH") or 0)
+    if not cl:
+        return b""
+
+    content = fp.read(cl)
+
+    return content
+
+
+def get_request_method(environ: dict) -> str:
+    method = environ.get("REQUEST_METHOD", "GET")
+    return method
+
+
+def get_request_path(environ: dict) -> str:
+    path = environ.get("PATH_INFO", "/")
+    return path
+
+
+def save_user_data(user_data: UserDataT) -> None:
+    user_data_dct = dataclasses.asdict(user_data)
+
+    with USER_DATA_FILE.open("w") as fp:
+        json.dump(user_data_dct, fp, sort_keys=True, indent=2)
+
+
+def load_user_data() -> UserDataT:
+    if not USER_DATA_FILE.is_file():
+        return UserDataT()
+
+    with USER_DATA_FILE.open("r") as fp:
+        user_data_dct = json.load(fp)
+
+    user_data = UserDataT(**user_data_dct)
+    return user_data
