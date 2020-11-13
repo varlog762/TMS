@@ -1,17 +1,26 @@
+from framework import settings
+from framework.consts import USER_COOKIE
+from framework.consts import USER_TTL
+from framework.db import save_user
+from framework.errors import MethodNotAllowed
 from framework.types import RequestT
 from framework.types import ResponseT
-from framework.types import UserDataT
 from framework.utils import build_status
-from framework.utils import load_user_data
 from framework.utils import read_static
-from framework.utils import save_user_data
 
 
 def handle_hello(request: RequestT) -> ResponseT:
-    if request.method == "GET":
-        return handle_hello_get(request)
-    else:
-        return handle_hello_post(request)
+    handlers = {
+        "GET": handle_hello_get,
+        "POST": handle_hello_post,
+    }
+
+    handler = handlers.get(request.method)
+    if not handler:
+        raise MethodNotAllowed
+
+    response = handler(request)
+    return response
 
 
 def handle_hello_get(request: RequestT) -> ResponseT:
@@ -21,15 +30,13 @@ def handle_hello_get(request: RequestT) -> ResponseT:
     base_html = base.content.decode()
     hello_html = read_static("hello.html").content.decode()
 
-    user_data = load_user_data()
-
     document = hello_html.format(
-        address_header=user_data.address or "nowhere",
-        address_value=user_data.address or "",
-        name_header=user_data.name or "anon",
-        name_value=user_data.name or "",
+        address_header=request.user.address or "nowhere",
+        address_value=request.user.address or "",
+        name_header=request.user.name or "anon",
+        name_value=request.user.name or "",
     )
-    document = base_html.format(xxx=document)
+    document = base_html.format(body=document)
 
     resp = ResponseT(
         status=build_status(200),
@@ -48,13 +55,25 @@ def handle_hello_post(request: RequestT) -> ResponseT:
     name = form_data.get("name", [None])[0]
     address = form_data.get("address", [None])[0]
 
-    user_data = UserDataT(name=name, address=address)
+    request.user.name = name
+    request.user.address = address
 
-    save_user_data(user_data)
+    save_user(request.user)
+
+    status = build_status(302)
+    headers = {
+        "Location": "/h/",
+        "Set-Cookie": (
+            f"{USER_COOKIE}={request.user.id};"
+            f" Domain={settings.HOST};"
+            f" HttpOnly;"
+            f" Max-Age={USER_TTL.total_seconds()}"
+        ),
+    }
 
     response = ResponseT(
-        status=build_status(302),
-        headers={"Location": "/h/"},
+        headers=headers,
+        status=status,
     )
 
     return response
