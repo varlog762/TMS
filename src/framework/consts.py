@@ -1,10 +1,13 @@
+from datetime import timedelta
 from pathlib import Path
 
 SERVER_RUNNING_BANNER = """
 +----------------------------------------+
 |             SERVER WORKS!              |
 +----------------------------------------+
+
 Visit http://{host}:{port}
+
 ..........................................
 """
 
@@ -24,4 +27,10 @@ METHODS_WITH_REQUEST_BODY = {
     "POST",
 }
 
-USER_DATA_FILE = (DIR_STORAGE / "user_data.json").resolve()
+USERS_STORAGE = (DIR_STORAGE / "users.json").resolve()
+
+USER_COOKIE = "z37user"
+
+USER_TTL = timedelta(minutes=5)
+
+DATE_TIME_FMT = "%Y-%m-%d %H:%M:%S"
