@@ -42,7 +42,7 @@ a:visited {
 }
 
 header {
-  background-color: #173470;
+  background-color: #00495b;
   display: grid;
   grid-template-columns: 20% 80%;
   grid-template-rows: repeat(2, auto);
@@ -79,7 +79,7 @@ header nav p:last-of-type {
 
 main {
   background-color: var(--color-bg);
-  --color-bg: #091a34;
+  --color-bg: #008b9e;
   margin-left: 4rem;
   margin-right: 4rem;
   padding: 2rem;
