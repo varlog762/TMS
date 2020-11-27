@@ -22,5 +22,6 @@
 
 <form action="/h/reset/" method="post">
   <button id="reset_id" type="submit">Reset</button>
+{% csrf_token %}
 </form>
 {% endblock %}

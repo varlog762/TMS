@@ -3,6 +3,7 @@ default:
   DATABASE_URL: ""
   DIRS_EXCLUDED:
     - .idea
+    - .static
     - .pytest_cache
     - .tests_artifacts
   DIRS_RESOURCES:
@@ -12,6 +13,8 @@ default:
   DIRS_SOURCES:
     - src
   DIRS_TEMPLATES:
+    - src/applications/landing/templates/
+    - src/applications/hello/templates/
     - src/project/templates/
   HOST: ""
   MODE_DEBUG: true
