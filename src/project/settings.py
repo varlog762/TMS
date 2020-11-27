@@ -1,5 +1,7 @@
+import os
 from pathlib import Path
 
+import dj_database_url
 import sentry_sdk
 from dynaconf import settings as _ds
 
@@ -67,12 +69,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "project.wsgi.application"
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": DIR_SRC / "db.sqlite3",
-    }
-}
+database_url = os.getenv("DATABASE_URL", _ds.DATABASE_URL)
+
+DATABASES = {"default": dj_database_url(database_url)}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
