@@ -19,7 +19,7 @@ def view_hello_index(request: HttpRequest) -> HttpResponse:
 
 
 def view_hello_greet(request: HttpRequest) -> HttpResponse:
-    name = request.POST.fet("name")
+    name = request.POST.get("name")
     address = request.POST.get("address")
 
     request.session["name"] = name
