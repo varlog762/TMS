@@ -43,6 +43,6 @@ ci:
 
 
 heroku:
-  HOST: "tms-z37.herokuapp.com"
+  HOST: "tmsfirstproj.herokuapp.com"
   MODE_DEBUG: false
   VENV_SYNTHETIC: true
